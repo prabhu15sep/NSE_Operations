@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 
 
 
-def symbol_to_path(symbol, base_dir="C:\\Users\\ppadayac\\"):    #"C:\\Users\\ppadayac\\"
-    """Return CSV file path given ticker symbol."""
+def symbol_to_path(symbol, base_dir="/Volumes/2/PyD/"):    #"C:\\Users\\ppadayac\\"
+    """Return CSV file p  ath given ticker symbol."""
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
 
