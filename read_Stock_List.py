@@ -12,11 +12,5 @@ def get_list(list_name,ind_key):
     parse_dates=True, usecols=['Symbol', 'Series','ISIN Code'], na_values=['nan'])
     return df
 
-def test_run():
-    df = get_list('nse_Top50', 'Symbol')
-    print(df)
-    
-if __name__ == "__main__":
-    test_run()
 
     
