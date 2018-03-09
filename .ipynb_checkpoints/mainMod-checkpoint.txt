@@ -1,8 +1,0 @@
-from read_Stock_List import get_list
-
-def test_run():
-    df = get_list('nse_Top50', 'Symbol')
-    print(df.index.tolist())
-    
-if __name__ == "__main__":
-    test_run()
