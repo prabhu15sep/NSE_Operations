@@ -1,8 +1,11 @@
-from read_Stock_List import get_list
+import read_Stock_Data as rd
 
 def test_run():
-    df = get_list('nse_Top50', 'Symbol')
-    print(df.index.tolist())
+    df_nse50 = rd.get_list('nse_Top50', 'Symbol')
+    list_nse50 = df_nse50.index.tolist()
+    for symbol in list_nse50[0:1]:
+        df_Stock = rd.get_data(symbol,'2018-03-08',20)
+    #print(df_Stock)
     
 if __name__ == "__main__":
     test_run()
