@@ -1,11 +1,13 @@
+import importlib
 import read_Stock_Data as rd
+importlib.reload(rd)  #To cater for any recent changes in the file
 
 def test_run():
     df_nse50 = rd.get_list('nse_Top50', 'Symbol')
     list_nse50 = df_nse50.index.tolist()
-    for symbol in list_nse50[0:1]:
-        df_Stock = rd.get_data(symbol,'2018-03-08',20)
-    #print(df_Stock)
+
+    df_Stock = rd.get_data(list_nse50[0:5],'2018-03-08',20)
+    print(df_Stock)
     
 if __name__ == "__main__":
     test_run()
