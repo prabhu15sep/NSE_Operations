@@ -1,3 +1,5 @@
+import pandas as pd
+import datetime
 import importlib
 import read_Stock_Data as rd
 importlib.reload(rd)  #To cater for any recent changes in the file
@@ -6,8 +8,15 @@ def test_run():
     df_nse50 = rd.get_list('nse_Top50', 'Symbol')
     list_nse50 = df_nse50.index.tolist()
 
-    df_Stock = rd.get_data(list_nse50[0:5],'2018-03-08',20)
-    print(df_Stock)
+    df_Stock = rd.get_data(list_nse50[0:20],'2018-03-08',20)
+    df_Stock.index = df_Stock.index.strftime('%d/%m/%Y')
+
+    df_filter = (df_Stock[-1:]).T
+
+    df_temp = pd.DataFrame(df_Stock.mean().round(2))
+    df_temp.columns =  ['Mean']
+    df_filter = df_filter.join(df_temp)
+    print(df_filter)
     
 if __name__ == "__main__":
     test_run()

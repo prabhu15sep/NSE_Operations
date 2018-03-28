@@ -23,6 +23,6 @@ def get_data(symbols,end_date,days):
         df_temp = df_temp.rename(columns={'Close Price': symbol})
         df = df.join(df_temp)
         df = df.dropna(subset=[symbol])
-    return df[0:days]
+    return df.tail(20)
 
     
