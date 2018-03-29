@@ -15,7 +15,7 @@ def get_list(list_name,ind_key):
 
 def get_data(symbols,end_date,days):
     """Read stock data (adjusted close) for given symbols from CSV files."""
-    dates = pd.date_range(end=end_date, periods=90)                                      #Extract data of 90 days
+    dates = pd.date_range(end=end_date, periods=365)                                      #Extract data of 90 days
     df = pd.DataFrame(index=dates)
     for symbol in symbols:
         df_temp = pd.read_csv(list_to_path(symbol), index_col='Date',
@@ -23,6 +23,6 @@ def get_data(symbols,end_date,days):
         df_temp = df_temp.rename(columns={'Close Price': symbol})                        #Rename Column name with Symbol
         df = df.join(df_temp)
         df = df.dropna(subset=[symbol])                                                  #Remove any blank records
-    return df.tail(20)                                                                   #Return last 20 traded days record
+    return df                                                                  #Return last 20 traded days record
 
     
