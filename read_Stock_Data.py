@@ -10,19 +10,19 @@ def list_to_path(list_name, base_dir="D:\\ppadayac\\PraChin\\db"):    #"D:\\ppad
     
 def get_list(list_name,ind_key):
     df = pd.read_csv(list_to_path(list_name), index_col=ind_key,
-            parse_dates=True, usecols=['Symbol', 'Series','ISIN Code'], na_values=['nan'])
+            parse_dates=True, usecols=['Symbol', 'Series','ISIN Code'], na_values=['nan']) # Extract Symbol,EQ series and Stock Code
     return df
 
 def get_data(symbols,end_date,days):
     """Read stock data (adjusted close) for given symbols from CSV files."""
-    dates = pd.date_range(end=end_date, periods=90)
+    dates = pd.date_range(end=end_date, periods=90)                                      #Extract data of 90 days
     df = pd.DataFrame(index=dates)
     for symbol in symbols:
         df_temp = pd.read_csv(list_to_path(symbol), index_col='Date',
-                parse_dates=True, usecols=['Date', 'Close Price'], na_values=['nan'])
-        df_temp = df_temp.rename(columns={'Close Price': symbol})
+                parse_dates=True, usecols=['Date', 'Close Price'], na_values=['nan'])    #Extract date and price
+        df_temp = df_temp.rename(columns={'Close Price': symbol})                        #Rename Column name with Symbol
         df = df.join(df_temp)
-        df = df.dropna(subset=[symbol])
-    return df.tail(20)
+        df = df.dropna(subset=[symbol])                                                  #Remove any blank records
+    return df.tail(20)                                                                   #Return last 20 traded days record
 
     
