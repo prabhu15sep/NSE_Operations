@@ -24,14 +24,11 @@ def test_run():
     df_filter = (df_Stock[-1:]).T                                   #Transposing the matrix to (rows as stocks and 1st column as last close price) for given date
     df_filter = df_filter.rename(columns={'08/03/2018': 'A~CP-3/8'}) 
     
-    df_filter = frm.stockAvg(df_Stock.tail(50),df_filter)                    # 1st Filter of calculating 50 Day Mean by less than 5 percent
-    df_filter = df_filter.rename(columns={'Mean': 'B~50DA+5%'})
-    df_filter.iloc[:,1:2]  = (df_filter.iloc[:,1:2] * 1.05).round(2)
+    df_filter = (frm.stockAvg(df_Stock.tail(50),df_filter)).round(2)         # 1st Filter of calculating 50 Day Mean by less than 5 percent
+    df_filter = df_filter.rename(columns={'Mean': 'B~50DA'})
     
-    df_filter = frm.stockAvg(df_Stock.tail(200),df_filter)                   # 2nd Filter of calculating 200 Day Mean by less than 5 percent
-    df_filter = df_filter.rename(columns={'Mean': 'C~200DA+5%'}) 
-    #df_filter.iloc[:,2:3]  = (df_filter.iloc[:,2:3] * 1.05).round(2)
-    print(df_filter)
+    df_filter = (frm.stockAvg(df_Stock.tail(200),df_filter)).round(2)        # 2nd Filter of calculating 200 Day Mean by less than 5 percent
+    df_filter = df_filter.rename(columns={'Mean': 'C~200DA'}) 
     
     df_filter = frm.stockRet(df_Stock,df_filter,10)                          # 3rd Filter of calculating 10 Day Return
     df_filter = df_filter.rename(columns={'Return': 'D~10DR'}) 
@@ -43,7 +40,8 @@ def test_run():
     #####################Setting Criteria#######
     
     ########################Citeria 1###########
-    df_filter['A>(B/C) '] = np.where((df_filter['A~CP-3/8'] >= df_filter['B~50DA+5%']) | (df_filter['A~CP-3/8'] >= df_filter['C~200DA+5%']), 1 , 0)
+    df_filter['A>(B/C) '] = np.where((df_filter['A~CP-3/8'] >= df_filter['B~50DA']) \
+                                    | (df_filter['A~CP-3/8'] >= df_filter['C~200DA']), 1 , 0)
     
     ########################Criteria 2##########
     df_filter['D<-8%'] = np.where(df_filter['D~10DR'] < -0.08, 1 , 0)
@@ -56,7 +54,7 @@ def test_run():
     
     df_filter['SellS']   =  3 - df_filter['BuyS'] 
     
-    #print(df_filter)  
+    print(df_filter)  
     
 if __name__ == "__main__":
     test_run()
