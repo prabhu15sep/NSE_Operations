@@ -19,7 +19,8 @@ def test_run():
     
     df_Stock = rd.get_data(list_nse50[0:20],'2018-03-08',20)        #Extract Data from a given date to past x no of traded days
     df_Stock.index = df_Stock.index.strftime('%d/%m/%Y')            #Formate date to DD/MM/YYYY formate
-    #print(df_Stock)
+
+
     ######Creating Filter################
     df_filter = (df_Stock[-1:]).T                                   #Transposing the matrix to (rows as stocks and 1st column as last close price) for given date
     df_filter = df_filter.rename(columns={'08/03/2018': 'A~CP-3/8'}) 
@@ -37,22 +38,38 @@ def test_run():
     df_filter = frm.stockAvg(df_filter_temp,df_filter) 
     df_filter = df_filter.rename(columns={'Mean': 'E~AR50D'}) 
     
+    
     #####################Setting Criteria#######
     
-    ########################Citeria 1###########
-    df_filter['A>(B/C) '] = np.where((df_filter['A~CP-3/8'] >= df_filter['B~50DA']) \
-                                    | (df_filter['A~CP-3/8'] >= df_filter['C~200DA']), 1 , 0)
+    ########################Citeria 1 to Buy###########
+    df_filter['A<(B/C) '] = np.where(((df_filter['A~CP-3/8'] <= df_filter['B~50DA']) & \
+                                      (df_filter['A~CP-3/8'] >= (df_filter['B~50DA'])*0.95)) \
+                                    |((df_filter['A~CP-3/8'] <= df_filter['C~200DA']) & \
+                                      (df_filter['A~CP-3/8'] >= (df_filter['C~200DA'])*0.95)), 1 , 0)
     
-    ########################Criteria 2##########
+    ########################Criteria 2 to Buy##########
     df_filter['D<-8%'] = np.where(df_filter['D~10DR'] < -0.08, 1 , 0)
     
-    ########################Criteria 3##########
+    ########################Criteria 3 to Buy ##########
     df_filter['E<1.5%'] = np.where(df_filter['E~AR50D'] < 0.015, 1 , 0)   
+
+    ########################Citeria to Sell###########
+    df_filter['A>(B/C) '] = np.where(((df_filter['A~CP-3/8'] >= df_filter['B~50DA']) & \
+                                      (df_filter['A~CP-3/8'] <= (df_filter['B~50DA'])*1.05)) \
+                                    |((df_filter['A~CP-3/8'] >= df_filter['C~200DA']) & \
+                                      (df_filter['A~CP-3/8'] <= (df_filter['C~200DA'])*1.05)), 1 , 0)
+    
+    ########################Criteria 2 to Sell ##########
+    df_filter['D>8%'] = np.where(df_filter['D~10DR'] > 0.08, 1 , 0)
+    
+    ########################Criteria 3 to Sell##########
+    df_filter['E>1.5%'] = np.where(df_filter['E~AR50D'] > 0.015, 1 , 0) 
+    
     
     ####################Ranking to Buy/Sell#####
-    df_filter['BuyS']   =  df_filter['A>(B/C) '] + df_filter['D<-8%'] + df_filter['E<1.5%']
+    df_filter['BuyS']   =  df_filter['A<(B/C) '] + df_filter['D<-8%'] + df_filter['E<1.5%']
     
-    df_filter['SellS']   =  3 - df_filter['BuyS'] 
+    df_filter['SellS']  =  df_filter['A>(B/C) '] + df_filter['D>8%'] + df_filter['E>1.5%']
     
     print(df_filter)  
     
