@@ -17,9 +17,9 @@ def test_run():
     df_nse50 = rd.get_list('nse_Top50', 'Symbol')                   #Extract list of Top Nse50 Stcoks
     list_nse50 = df_nse50.index.tolist()                            #Array of Stcok symbols
     
-    df_Stock = rd.get_data(list_nse50[0:20],'2018-03-08',20)        #Extract Data from a given date to past x no of traded days
+    df_Stock = rd.get_data(list_nse50[0:50],'2018-03-08',20)        #Extract Data from a given date to past x no of traded days
     df_Stock.index = df_Stock.index.strftime('%d/%m/%Y')            #Formate date to DD/MM/YYYY formate
-
+    #print(df_Stock)
 
     ######Creating Filter################
     df_filter = (df_Stock[-1:]).T                                   #Transposing the matrix to (rows as stocks and 1st column as last close price) for given date
