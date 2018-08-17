@@ -15,9 +15,12 @@ importlib.reload(rd)
 df_nse50 = rd.get_list('nse_Top50', 'Symbol')                   #Extract list of Top Nse50 Stcoks
 list_nse50 = df_nse50.index.tolist() 
 
+sbin = get_history(symbol="NIFTY",start=date(2017,1,1),end=date.today(),index=True)
+sbin.to_csv("/Volumes/2/PyD/nsedb/NIFTY.csv") 
 
 for symbl in list_nse50:
-    sbin = get_history(symbol=symbl, start=date(2017,1,1),end=date(2018,8,13))
-    sbin.to_csv("D:\\ppadayac\\PraChin\\db\\new\\{}.csv".format(str(symbl)))
+    sbin = get_history(symbol=symbl, start=date(2017,1,1),end=date.today())
+    sbin.to_csv("/Volumes/2/PyD/nsedb/{}.csv".format(str(symbl)))    #D:\\ppadayac\\PraChin\\db\\new\\
+
 
 #sbin.to_csv("D:\\ppadayac\\PraChin\\db\\SBIN.csv")
