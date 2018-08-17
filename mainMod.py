@@ -3,7 +3,7 @@ import datetime
 import importlib
 import numpy as np
 
-i 
+ 
     
     df_filter = (frm.stockAvg(df_Stock.tail(200),df_filter)).round(2)        # 2nd Filter of calculating 200 Day Mean by less than 5 percent
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'}) 
