@@ -25,7 +25,7 @@ def get_data(symbols,end_date,days):
         df_temp = df_temp[df_temp.Series == 'EQ']                                        # Extracting only Equities
         df_temp.drop(['Series'], axis = 1, inplace = True)                               #Dropping the Series column
         df = df.join(df_temp)
-        df = df.dropna(subset=[symbol])                                                  #Remove any blank records
+ #      df = df.dropna(subset=[symbol])                                                  #Remove any blank records
     return df                                                                  #Return last 20 traded days record
 
     
