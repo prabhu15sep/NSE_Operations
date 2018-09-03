@@ -20,11 +20,16 @@ def get_data(symbols,end_date,days):
     df = pd.DataFrame(index=dates)
     for symbol in symbols:
         df_temp = pd.read_csv(list_to_path(symbol), index_col='Date',
-                parse_dates=True, usecols=['Date', 'Close','Series'], na_values=['nan'])    #Extract date , series and price
+                parse_dates=True,dayfirst=True, usecols=['Date', 'Close'], na_values=['nan'])    #Extract date , series and price
         df_temp = df_temp.rename(columns={'Close': symbol})                        #Rename Column name with Symbol
-        df_temp = df_temp[df_temp.Series == 'EQ']                                        # Extracting only Equities
-        df_temp.drop(['Series'], axis = 1, inplace = True)                               #Dropping the Series column
-        df = df.join(df_temp)
+        df_temp = df_temp.dropna()                                        #Remove any blank records
+        
+        if symbol == 'NIFTY':                                             
+            join_typ = 'inner'
+        else:
+            join_typ = 'left'
+        
+        df = df.join(df_temp,how=join_typ)
  #      df = df.dropna(subset=[symbol])                                                  #Remove any blank records
     return df                                                                  #Return last 20 traded days record
 

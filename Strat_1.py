@@ -22,27 +22,27 @@ def test_run():
     ######Reading Data###################
     df_nse50 = rd.get_list('nse_Top50', 'Symbol')                   #Extract list of Top Nse50 Stcoks
     list_nse50 = df_nse50.index.tolist()                            #Array of Stcok symbols
-    
-    df_Stock = rd.get_data(list_nse50[0:50],datetime.date.today(),1000)        #Extract Data from a given date to past x no of traded days
-    df_Stock = df_Stock.dropna(how='all') 
-    
+
     csv = "CSV"
     excel = "EXCEL"
+    start_date = datetime.date(2013,1,1)
+    end_date = datetime.date.today()      #date.today() datetime.date(2013,12,31)
     
-    df_Stock.index = df_Stock.index.strftime('%d.%m.%Y')            #Formate date to DD/MM/YYYY formate
-    #print(df_Stock)
-    str_trade_date = ''.join(df_Stock.iloc[-1:,:0].index.values.tolist()) 
+    df_Stock = rd.get_data(list_nse50[0:51],end_date,1000)        #Extract Data from a given date to past x no of traded days
+    df_Stock = df_Stock.dropna(how='all') 
+        #Formate date to DD/MM/YYYY formate
+    df_Stock.index.name = 'Date'
+    str_trade_date = ''.join(df_Stock.iloc[-1:,:0].index.strftime('%d.%m.%Y')) 
 
-    #writer = cmn.to_file(df_Stock,"StockPrice1",csv,str_trade_date)
-    #writer = cmn.to_file(df_Stock.iloc[:2,:2],"StockPrice2",excel,str_trade_date,writer)
-    
+    writer = cmn.to_file(df_Stock.sort_index(ascending=False, inplace=False) ,"StockPrice1",csv,str_trade_date)
+    #writer = cmn.to_file(df_Stock.iloc[:2,:2],"StockPrice2",excel,str_trade_date,writer)  
     ######Creating Filter################         
     #df_Stock = df_Stock.iloc[:,:1] 
 
     rm_200 = rf.get_rolling_mean(df_Stock, window=200)
-    writer = cmn.to_file(df_Stock,"StockPrice1",csv,str_trade_date)
+    writer = cmn.to_file(rm_200.sort_index(ascending=False, inplace=False),"StockPrice3",csv,str_trade_date)
     rm_50 = rf.get_rolling_mean(df_Stock, window=50)
-    writer = cmn.to_file(df_Stock,"StockPrice2",csv,str_trade_date)
+    writer = cmn.to_file(rm_50.sort_index(ascending=False, inplace=False),"StockPrice2",csv,str_trade_date)
     day_1_returns = rf.compute_daily_returns(df_Stock,1)
     
     abs_day_1_returns = day_1_returns.abs()
