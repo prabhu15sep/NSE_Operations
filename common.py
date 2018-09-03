@@ -11,7 +11,7 @@ import numpy as np
 def to_file(pframe,fname,fileformat,str_trade_date,x_writer=np.nan):
     if(pd.notna(x_writer)):
         writer = x_writer
-    else:
+    elif(fileformat == "EXCEL"):
         writer = pd.ExcelWriter("Strat1_{}.xlsx".format(str_trade_date))
     if fileformat == "CSV":
         #pframe.dropna(how='all')
