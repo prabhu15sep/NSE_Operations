@@ -1,0 +1,267 @@
+P&L Calculator
+
+Close Buy 
+=HLOOKUP(B18,'Stock Price'!$C$1:$BB$1813,'P&L Calculator'!$A$14,0)
+
+Close Sell
+=HLOOKUP(E18,'Stock Price'!$C$1:$BB$1813,'P&L Calculator'!$A$14,0)
+
+Profit
+=C18*(H18-D18)+F18*(G18-I18)
+
+Value
+=IF(OR(B18="Nifty",B18="Bank Nifty"),G18*F18*10%,(C18*D18+F18*G18)*6%)
+
+SL
+=0.75*K18
+
+---------------------------------------------------------------------------------------------------
+Moving Average 200
+
+=IF(C$1="","",IF(B201="","",AVERAGE('Stock Price'!C2:'Stock Price'!C201)))
+
+--------------------------------------------------------------------------------
+Moving Average 50
+=IF(C$1="","",IF(B51="","",AVERAGE('Stock Price'!C2:'Stock Price'!C51)))
+
+-----------------------------------------------------------------------------------
+1D Return
+
+=IF(C$1="","",IF(B3="","",('Stock Price'!C3-'Stock Price'!C2)))
+
+% Absolute Stock Return
+=IF(CC$1="","",IF(CB3="","",ABS(('Stock Price'!C3-'Stock Price'!C2)/'Stock Price'!C3)*100))
+
+% Return Counter
+=IF(FC$1="","",IF(FB52="","",IF(AVERAGE(CC3:CC52)<2,1,0)))
+
+------------------------------------------------------------------------------
+10D Return
+=IF(C$11="","",IF(B21="","",('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11*100))
+
+Standard Deviation
+=STDEV(C21:C1220)
+
+Large 10%
+=AVERAGE(LARGE(C21:C1220,120),LARGE(C21:C1220,40),LARGE(C21:C1220,120))
+
+Small 10%
+=AVERAGE(SMALL(C21:C1220,120),SMALL(C21:C1220,40),SMALL(C21:C1220,120))
+
+Large 3%
+=AVERAGE(LARGE(C21:C1220,40),LARGE(C21:C1220,40),LARGE(C21:C1220,13))
+
+Small 3%
+=AVERAGE(SMALL(C21:C1220,40),SMALL(C21:C1220,40),SMALL(C21:C1220,13))
+
+Large 15%
+=AVERAGE(LARGE(C21:C1220,120),LARGE(C25:C1224,180),LARGE(C21:C1220,180))
+
+Small 15%
+=AVERAGE(SMALL(C21:C1220,180),SMALL(C21:C1220,120),SMALL(C21:C1220,180))
+
+10D Return Counter
+=IF(CC$11="","",IF(CB21="","",IF((('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11)<C$5/100,3,IF(('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11<C$3/100,2,IF(('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11<C$7/100,1,0)))))
+
+(SELL)
+=IF(CC$11="","",IF(CB21="","",IF((('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11)>C$4/100,3,IF(('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11>C$2/100,2,IF(('Stock Price'!C11-'Stock Price'!C2)/'Stock Price'!C11>C$6/100,1,0)))))
+Here C11 is current stock
+
+------------------------------------------------------------------------------------------------
+Rough work
+=IF(C$1="","",IF('1D Return'!C3>0,'1D Return'!C3,0))
+
+----------------------------------------------------------------------------------------------
+Rough Work 2
+
+=IF(D$1="","",IF('1D Return'!D3<0,-'1D Return'!D3,0))
+
+-----------------------------------------------------------------------------------------------
+RSI Stock
+=IF(C$1="","",IF(B17="","",100-(100/(1+SUM('Rough work'!C4:C17)/SUM('Rough Work 2'!C4:C17)))))
+
+RSI counter
+=IF(CD$1="","",IF(D15<15,3,IF(D15<25,2,IF(D15<35,1,0))))
+
+(SELL)
+=IF(CC$1="","",IF(C1217>85,3,IF(C1217>75,2,IF(C1217>65,1,0))))
+----------------------------------------------------------------------------------------------------
+VWAP
+
+Low(C2)  = SMALL('Stock Price'!C863:C1232,1)
+High(C22) = =LARGE('Stock Price'!C863:C1232,1)
+
+5% = C$2+(C$22-C$2)*$B3
+10% = same as above
+15%
+20%
+25%
+30%
+35%
+40%
+45%
+50%
+55%
+60%
+65%
+70%
+75%
+80%
+85%
+90%
+95% =  same as above 
+
+Low (below one counter) =  =VWAP(C2,C3,C$23)
+
+***********************************************************************************
+Function VWAP(x1 As Double, y1 As Double, k As Double) As Double
+
+Dim j As Double
+j = 100
+VWAP = 0
+
+For j = 863 To 1232
+p = ActiveWorkbook.Sheets("stock price").Cells(j, k).Value
+If (p >= x1 And p < y1) Then
+VWAP = VWAP + 1
+Else: VWAP = VWAP
+
+End If
+
+Next
+
+End Function
+
+*****************************************************************************************
+
+High below one (counter)
+after the number series 46,45,44,etc
+=LARGE(C28:C46,1)  (1st largst)
+=LARGE(C28:C46,2)  (2nd ..)
+=LARGE(C28:C46,3)  (3rd ..)
+
+=VLOOKUP(C50,C$28:$AV$47,C$48,0)		
+=VLOOKUP(C51,C$28:$AV$47,C$48,0)		
+=VLOOKUP(C52,C$28:$AV$47,C$48,0) 
+
+=C$2+(C$22-C$2)*(C54-0.025)
+=C$2+(C$22-C$2)*(C55-0.025)
+=C$2+(C$22-C$2)*(C56-0.025)
+
+VMAP counter (same for SELL)
+=IF(CC$1="","",IF($CB51="","",IF(ABS('Stock Price'!C51-VWAP!C$58)/VWAP!C$58<0.02,2,IF(ABS('Stock Price'!C51-VWAP!C$59)/VWAP!C$59<0.02,2,IF(ABS('Stock Price'!C51-VWAP!C$60)/VWAP!C$60<0.02,2,0)))))
+
+------------------------------------------------------------------------------------------------
+DMA Counter
+=IF(C$1="","",IF(B51="","",(IF(AND(('Stock Price'!C51-'Moving Average 50'!C51)/'Stock Price'!C51<0.02,('Stock Price'!C51-'Moving Average 50'!C51)/'Stock Price'!C51>-0.015),1,0)+IF(AND(('Stock Price'!C51-'Moving Average 200'!C51)/'Stock Price'!C51<0.02,('Stock Price'!C51-'Moving Average 200'!C51)/'Stock Price'!C51>-0.02),2,0))))
+
+(SELL)
+=IF(C$1="","",IF(B51="","",(IF(AND(('Stock Price'!C51-'Moving Average 50'!C51)/'Stock Price'!C51>-0.02,('Stock Price'!C51-'Moving Average 50'!C51)/'Stock Price'!C51<0.015),1,0)+IF(AND(('Stock Price'!C51-'Moving Average 200'!C51)/'Stock Price'!C51>-0.02,('Stock Price'!C51-'Moving Average 200'!C51)/'Stock Price'!C51<0.02),2,0))))
+
+--------------------------------------------------------------------------------------------
+Swing Level
+=IF(C$1="","",IF(B101="","",SMALL('Stock Price'!C2:C101,1)))
+
+(Sell)
+=IF(B201="","",IF(C$1="","",LARGE('Stock Price'!C102:C201,1)))
+
+Counter 
+=IF(CC$1="","",IF('Stock Price'!C101=C101,0,IF(ABS('Stock Price'!C101-'Swing Level'!C101)/'Swing Level'!C101<0.025,2,0)))
+
+(SELL is same)
+=IF(CC$1="","",IF('Stock Price'!C201=C201,0,IF(ABS('Stock Price'!C201-'Swing Level'!C201)/'Swing Level'!C201<0.025,2,0)))
+--------------------------------------------------------------------------------------------
+
+Deviation from MA
+=IF($B60="","",IF(C$10="","",ABS('Stock Price'!C51-AVERAGE('Stock Price'!C32:C51))/'Stock Price'!C51))
+
+Large 5% = LARGE(C60:C1060,50)
+Large 12%  =LARGE(C60:C1060,120)
+Large 20% =LARGE(C60:C1060,200)
+
+counter 
+=IF($CB60="","",IF(CC$10="","",IF('Stock Price'!C51>'Moving Average 50'!C51,0,IF(C60>C$1,3,IF(C60>C$2,2,IF(C60>C$3,1,0))))))
+
+(SELL)
+=IF($CB60="","",IF(CC$10="","",IF('Stock Price'!C51<'Moving Average 50'!C51,0,IF(C60>C$1,3,IF(C60>C$2,2,IF(C60>C$3,1,0))))))
+------------------------------------------------------------------------------------------------------
+
+Summary (same for SELL)
+=IF(C$1="","",IF(B51="","",('DMA Counter'!C51+'10D Return'!CC61+'RSI Stock'!CC51+'Swing Level'!CC51+'Deviation from MA'!CC60+VWAP!CC51)))
+
+=IFERROR(LARGE(C51:AU51,1),0)
+
+
+--------------------------------------------------------------------------------------------------
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Breakout : 
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+---------------------------------------------------------------------------------------------------
+15D Return
+=IF(C$11="","",IF($B32="","",ABS('Stock Price'!C22-'Stock Price'!C7)/'Stock Price'!C22*100))
+
+Standard Deviation =STDEV(C21:C1220)
+Small 30%  =SMALL(C21:C1220,360)
+Large 30%  =LARGE(C21:C1220,360)
+
+
+Counter 
+=IF(CC$11="","",IF(CB21="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$7/100,1,0)))))
+
+---------------------------------------------------------------------------------------
+10D Return
+=IF(C$11="","",IF($B32="","",ABS(('Stock Price'!C22-'Stock Price'!C12)/'Stock Price'!C22*100)))
+
+Standard Deviation
+Small 30%
+Large 30%
+
+Counter 
+=IF(CC$11="","",IF(CB21="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$7/100,1,0)))))
+
+---------------------------------------------------------------------------------------------
+5D Return
+=IF(C$11="","",IF($B32="","",ABS(('Stock Price'!C22-'Stock Price'!C17)/'Stock Price'!C17*100)))
+
+Standard Deviation
+Small 30%
+Large30%
+
+Counter 
+=IF(CC$11="","",IF(CB21="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$7/100,1,0)))))
+
+---------------------------------------------------------------------------------------------
+15D HL
+=IF(C$11="","",IF($B32="","",(LARGE('Stock Price'!C22:'Stock Price'!C7,1)-SMALL('Stock Price'!C22:'Stock Price'!C7,1))/'Stock Price'!C22*100))
+
+
+Standard Deviation
+Small 30%
+
+Counter
+=IF(CC$11="","",IF(CB32="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22<C$7/100,1,0)))))
+------------------------------------------------------------------------------------------------
+
+10D HL
+=IF(C$11="","",IF($B32="","",(LARGE('Stock Price'!C22:'Stock Price'!C12,1)-SMALL('Stock Price'!C22:'Stock Price'!C12,1))/'Stock Price'!C22*100))
+
+Standard Deviation
+Small 30%
+
+Counter 
+=IF(CC$11="","",IF(CB32="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C13)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C22<C$7/100,1,0)))))
+
+--------------------------------------------------------------------------------------------------------------------------------
+5D HL
+=IF(C$11="","",IF($B32="","",(LARGE('Stock Price'!C22:'Stock Price'!C17,1)-SMALL('Stock Price'!C22:'Stock Price'!C17,1))/'Stock Price'!C22*100))
+
+Standard Deviation
+Small 30%
+=IF(CC$11="","",IF(CB21="","",IF((('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11)<C$5/100,3,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$3/100,2,IF(('[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11-'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C2)/'[Analysis.-BuyFinalv2.xlsm]Stock Price'!C11<C$7/100,1,0)))))
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+In Range
+=IF($B41="","",IF(C$11="","",IF(AND('15D Return'!C40<'15D Return'!C$2,'10D Return'!C40<'10D Return'!C$2,'`5D Return'!C40<'`5D Return'!C$2,'15D HL'!C40<'15D HL'!C$2,'10D HL'!C40<'10D HL'!C$2,'5D HL'!C40<'5D HL'!C$2,'Stock Price'!C31>LARGE('Stock Price'!C15:C30,1)),"B",IF(AND('15D Return'!C40<'15D Return'!C$2,'10D Return'!C40<'10D Return'!C$2,'`5D Return'!C40<'`5D Return'!C$2,'15D HL'!C40<'15D HL'!C$2,'10D HL'!C40<'10D HL'!C$2,'5D HL'!C40<'5D HL'!C$2,'Stock Price'!C31<SMALL('Stock Price'!C15:C30,1)),"S",0))))
+
+=IF(CB41="","",('Stock Price'!C31-'Stock Price'!C41)/'Stock Price'!C31)

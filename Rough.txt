@@ -1,0 +1,47 @@
+
+temp = np.random.randint(1,10, 10)
+a,b,c = find_nlargest(temp,5,1,6,3)
+test_1 = df_Stock.iloc[0:30,:1].values.tolist()
+
+
+
+ipdb> cmn.find_nlargest_avg(test_1,30,1,10,20)
+array([5812.13333333])
+
+ dex = abs_day_1_returns.index.values
+  test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
+  test_2 = pd.DataFrame(test_1,index=dex ,columns=list_nse50)
+
+  test_1 = np.where(ra_3psmall == np.NaN,np.NaN, 
+  						np.where(day_10_returns <= ra_3psmall/100,3,
+  						np.where(day_10_returns <= ra_10psmall/100,2,
+  						np.where(day_10_returns <= ra_15psmall/100,1,0)
+
+  test_1 = np.where(ra_3psmall == np.NaN,np.NaN,np.where(day_10_returns <= ra_3psmall/100,3,0)
+
+
+
+  ipdb> 
+ipdb> test_1 = np.where(day_10_returns <= ra_15psmall/100,1,0)
+
+ipdb> 
+ipdb> test_1 = np.where(day_10_returns <= 0.02,2,test_1)
+
+ipdb> 
+ipdb> test_2 = np.where(day_10_returns <= ra_15psmall/100,1,0)
+
+ipdb> test_2 = np.where(day_10_returns <= 0.02,2,test_2)
+
+ipdb> 
+ipdb> test_2 = np.where(day_10_returns <= 0.01,3,test_2)
+
+ipdb> 
+ipdb> test_2 = np.where(ra_3psmall.isnull() ,0,test_2)
+
+ipdb> 
+ipdb> dex = ra_15psmall.index.values
+
+ipdb> test_3 = pd.DataFrame(test_2,index=dex ,columns=list_nse50)
+
+ipdb> 
+ipdb> test_2 = np.where(ra_3psmall.isnull() ,np.nan,test_2)

@@ -37,7 +37,7 @@ def test_run():
     #writer = cmn.to_file(df_Stock.sort_index(ascending=False, inplace=False) ,"1_StockPrice",csv,str_trade_date)
     #writer = cmn.to_file(df_Stock.iloc[:2,:2],"StockPrice2",excel,str_trade_date,writer)  
 
-
+    '''
     rm_200 = rf.get_rolling_mean(df_Stock, window=200)
     #writer = cmn.to_file(rm_200.sort_index(ascending=False, inplace=False),"2_RollMean200",csv,str_trade_date)
     
@@ -52,7 +52,35 @@ def test_run():
     
     rm_abs1day_50 = rf.get_rolling_mean(abs_day_1_returns, window=50)
     
-    df_filter = (frm.stockAvg(df_Stock.tail(200),df_filter)).round(2)       # 2nd Filter of calculating 200 Day Mean by less than 5 percent
+    counter_rm_abs1day_50 = rm_abs1day_50 < 2
+    #writer = cmn.to_file(counter_rm_abs1day_50.sort_index(ascending=False, inplace=False),"6_Counter50DayAbsRet",csv,str_trade_date)
+    '''
+    day_10_returns = rf.compute_daily_returns(df_Stock,10)
+    #writer = cmn.to_file(day_10_returns.sort_index(ascending=False, inplace=False),"7_10DayRet",csv,str_trade_date)
+    
+    #rd_10DRet = rf.get_rolling_std(day_10_returns, window=1200)
+    #writer = cmn.to_file(rd_10DRet.sort_index(ascending=False, inplace=False),"8_10DayRetStdDev",csv,str_trade_date)
+    
+    
+    ra_10plarge = rf.get_rolling_nAvg(df_Stock,1200,120,120,40)
+    #writer = cmn.to_file(ra_10plarge.sort_index(ascending=False, inplace=False),"9_10PCLarge",csv,str_trade_date)
+    
+    ra_10psmall = rf.get_rolling_nAvg(df_Stock,1200,1080,1080,1160)
+    #writer = cmn.to_file(ra_10psmall.sort_index(ascending=False, inplace=False),"10_10PCSmall",csv,str_trade_date)
+ 
+    ra_3plarge = rf.get_rolling_nAvg(df_Stock,1200,40,40,13)
+    #writer = cmn.to_file(ra_3plarge.sort_index(ascending=False, inplace=False),"11_3PCLarge",csv,str_trade_date)
+ 
+    ra_3psmall = rf.get_rolling_nAvg(df_Stock,1200,1140,1160,1147)
+    #writer = cmn.to_file(ra_3psmall.sort_index(ascending=False, inplace=False),"12_3PCSmall",csv,str_trade_date)
+ 
+    ra_15plarge = rf.get_rolling_nAvg(df_Stock,1200,120,180,180)
+    #writer = cmn.to_file(ra_15plarge.sort_index(ascending=False, inplace=False),"13_15PCLarge",csv,str_trade_date)
+ 
+    ra_15psmall = rf.get_rolling_nAvg(df_Stock,1200,1080,1020,1120)
+    #writer = cmn.to_file(ra_15psmall.sort_index(ascending=False, inplace=False),"14_15PCSmall",csv,str_trade_date)
+ 
+    test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     
     df_filter = frm.stockRet(df_Stock,df_filter,10)                          # 3rd Filter of calculating 10 Day Return

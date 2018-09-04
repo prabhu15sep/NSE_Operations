@@ -24,3 +24,19 @@ def to_file(pframe,fname,fileformat,str_trade_date,x_writer=np.nan):
         writer.save()
     
     return writer   
+
+def find_nlargest(input_list,size=3,n1=1,n2=1,n3=1):
+    temp = input_list.copy()
+    if sum(~np.isnan(x) for x in temp) < size:
+        return np.NaN,np.NaN,np.NaN
+    #test.sort()
+    #desc_test = test[::-1]
+    desc_list = np.sort(temp)[::-1]
+    return  desc_list[n1 - 1],desc_list[n2 - 1],desc_list[n3 - 1]
+    
+def find_nlargest_avg(input_list,size=5,n1=1,n2=1,n3=1):
+    temp = input_list.copy()
+    if sum(~np.isnan(x) for x in temp) < size:
+        return np.NaN
+    desc_list = np.sort(temp)[::-1]
+    return  (desc_list[n1 - 1] + desc_list[n2 - 1] + desc_list[n3 - 1])/3
