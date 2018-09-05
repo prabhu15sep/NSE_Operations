@@ -54,32 +54,72 @@ def test_run():
     
     counter_rm_abs1day_50 = rm_abs1day_50 < 2
     #writer = cmn.to_file(counter_rm_abs1day_50.sort_index(ascending=False, inplace=False),"6_Counter50DayAbsRet",csv,str_trade_date)
-    '''
-    day_10_returns = rf.compute_daily_returns(df_Stock,10)
-    #writer = cmn.to_file(day_10_returns.sort_index(ascending=False, inplace=False),"7_10DayRet",csv,str_trade_date)
     
-    #rd_10DRet = rf.get_rolling_std(day_10_returns, window=1200)
+    
+    rd_10DRet = rf.get_rolling_std(day_10_returns, window=1200)
     #writer = cmn.to_file(rd_10DRet.sort_index(ascending=False, inplace=False),"8_10DayRetStdDev",csv,str_trade_date)
     
+    day_10_returns = rf.compute_daily_returns(df_Stock,10)
+    writer = cmn.to_file(day_10_returns.sort_index(ascending=False, inplace=False),"7_10DayRet",csv,str_trade_date)
     
     ra_10plarge = rf.get_rolling_nAvg(df_Stock,1200,120,120,40)
-    #writer = cmn.to_file(ra_10plarge.sort_index(ascending=False, inplace=False),"9_10PCLarge",csv,str_trade_date)
+    writer = cmn.to_file(ra_10plarge.sort_index(ascending=False, inplace=False),"9_10PCLarge",csv,str_trade_date)
     
     ra_10psmall = rf.get_rolling_nAvg(df_Stock,1200,1080,1080,1160)
-    #writer = cmn.to_file(ra_10psmall.sort_index(ascending=False, inplace=False),"10_10PCSmall",csv,str_trade_date)
+    writer = cmn.to_file(ra_10psmall.sort_index(ascending=False, inplace=False),"10_10PCSmall",csv,str_trade_date)
  
     ra_3plarge = rf.get_rolling_nAvg(df_Stock,1200,40,40,13)
-    #writer = cmn.to_file(ra_3plarge.sort_index(ascending=False, inplace=False),"11_3PCLarge",csv,str_trade_date)
+    writer = cmn.to_file(ra_3plarge.sort_index(ascending=False, inplace=False),"11_3PCLarge",csv,str_trade_date)
  
     ra_3psmall = rf.get_rolling_nAvg(df_Stock,1200,1140,1160,1147)
-    #writer = cmn.to_file(ra_3psmall.sort_index(ascending=False, inplace=False),"12_3PCSmall",csv,str_trade_date)
+    writer = cmn.to_file(ra_3psmall.sort_index(ascending=False, inplace=False),"12_3PCSmall",csv,str_trade_date)
  
     ra_15plarge = rf.get_rolling_nAvg(df_Stock,1200,120,180,180)
-    #writer = cmn.to_file(ra_15plarge.sort_index(ascending=False, inplace=False),"13_15PCLarge",csv,str_trade_date)
+    writer = cmn.to_file(ra_15plarge.sort_index(ascending=False, inplace=False),"13_15PCLarge",csv,str_trade_date)
  
     ra_15psmall = rf.get_rolling_nAvg(df_Stock,1200,1080,1020,1120)
-    #writer = cmn.to_file(ra_15psmall.sort_index(ascending=False, inplace=False),"14_15PCSmall",csv,str_trade_date)
+    writer = cmn.to_file(ra_15psmall.sort_index(ascending=False, inplace=False),"14_15PCSmall",csv,str_trade_date)
  
+    array_cntr = np.where(ra_3psmall.isnull() ,np.nan,
+                      np.where(day_10_returns*100 <= ra_3psmall/100,3,
+                      np.where(day_10_returns*100 <= ra_10psmall/100,2,
+                      np.where(day_10_returns*100 <= ra_15psmall/100,1,0))))
+    
+    indx = ra_15psmall.index.values
+    Cntr_10D_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_10D_Buy.sort_index(ascending=False, inplace=False),"15_10DCounterBuy",csv,str_trade_date)
+    
+    
+    array_cntr = np.where(ra_3plarge.isnull() ,np.nan,
+                      np.where(day_10_returns*100 > ra_3plarge/100,3,
+                      np.where(day_10_returns*100 > ra_10plarge/100,2,
+                      np.where(day_10_returns*100 > ra_15plarge/100,1,0))))
+    
+    indx = ra_15plarge.index.values
+    Cntr_10D_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_10D_Sell.sort_index(ascending=False, inplace=False),"16_10DCounterSell",csv,str_trade_date)
+    '''
+    rRSI_13 = rf.get_Rolling_RSI(df_Stock,13)
+    writer = cmn.to_file(rRSI_13.sort_index(ascending=False, inplace=False),"17_13DRSI",csv,str_trade_date)
+    
+    array_cntr = np.where(rRSI_13.isnull() ,np.nan,
+                      np.where(rRSI_13 <= 15,3,
+                      np.where(rRSI_13 <= 25,2,
+                      np.where(rRSI_13 <= 35,1,0))))
+    
+    indx = rRSI_13.index.values
+    Cntr_RSI_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_RSI_Buy.sort_index(ascending=False, inplace=False),"18_RSICounterBuy",csv,str_trade_date)
+   
+    array_cntr = np.where(rRSI_13.isnull() ,np.nan,
+                      np.where(rRSI_13 > 85,3,
+                      np.where(rRSI_13 > 75,2,
+                      np.where(rRSI_13 > 65,1,0))))
+    
+    indx = rRSI_13.index.values
+    Cntr_RSI_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_RSI_Sell.sort_index(ascending=False, inplace=False),"19_RSICounterSell",csv,str_trade_date)
+      
     test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     
@@ -136,3 +176,8 @@ def test_run():
     
 if __name__ == "__main__":
     test_run()
+    
+    test_2 = np.where(ra_3psmall.isnull() ,0,
+                      np.where(day_10_returns <= ra_3psmall/100,3,
+                      np.where(day_10_returns <= ra_10psmall/100,2,
+                      np.where(day_10_returns <= ra_15psmall/100,1,0))))

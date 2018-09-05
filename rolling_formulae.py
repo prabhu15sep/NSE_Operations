@@ -42,5 +42,31 @@ def compute_daily_returns(df,n=1):
     return df_daily_ret
 
 def get_rolling_nAvg(df,window,n1,n2,n3):
-    hello_1 = df.rolling(window=window, min_periods=window, center=False).apply(lambda x: cmn.find_nlargest_avg(x,window,n1,n2,n3))
-    return hello_1
+    df_nAvg = df.rolling(window=window, min_periods=window, center=False).apply(lambda x: cmn.find_nlargest_avg(x,window,n1,n2,n3))
+    return df_nAvg
+
+def get_Rolling_RSI(df,window_length):
+    df_temp = df.diff()                                       # Get the difference in price from previous step
+    df_temp = df_temp[1:]                                           # Get rid of the first row Nan
+
+    up, down = df_temp.copy(), df_temp.copy()
+    up[up < 0] = 0                                                  # Make the positive gains (up) 
+    down[down > 0] = 0                                              # and negative gains (down) Series
+    
+    # Calculate the EWMA
+    #roll_up1 = pd.stats.moments.ewma(up, window_length)
+    #roll_down1 = pd.stats.moments.ewma(down.abs(), window_length)
+
+    # Calculate the RSI based on EWMA
+    #RS1 = roll_up1 / roll_down1
+    #RSI1 = 100.0 - (100.0 / (1.0 + RS1))
+    
+    # Calculate the SMA
+    roll_up2 = get_rolling_mean(up,window_length)
+    roll_down2 = get_rolling_mean(down.abs(), window_length)
+    
+    # Calculate the RSI based on SMA
+    RS2 = roll_up2.div(roll_down2) 
+    RSI2 = 100.0 - (100.0 / (1.0 + RS2))
+    
+    return RSI2
