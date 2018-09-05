@@ -32,18 +32,17 @@ def test_run():
     df_Stock = df_Stock.dropna(how='all') 
         #Formate date to DD/MM/YYYY formate
     df_Stock.index.name = 'Date'
-    str_trade_date = ''.join(df_Stock.iloc[-1:,:0].index.strftime('%d.%m.%Y')) 
-
+    str_trade_date = ''.join(df_Stock.iloc[-1:,:0].index.strftime('%d.%m.%Y'))
+    
     #writer = cmn.to_file(df_Stock.sort_index(ascending=False, inplace=False) ,"1_StockPrice",csv,str_trade_date)
     #writer = cmn.to_file(df_Stock.iloc[:2,:2],"StockPrice2",excel,str_trade_date,writer)  
-
-    '''
+    
     rm_200 = rf.get_rolling_mean(df_Stock, window=200)
     #writer = cmn.to_file(rm_200.sort_index(ascending=False, inplace=False),"2_RollMean200",csv,str_trade_date)
     
     rm_50 = rf.get_rolling_mean(df_Stock, window=50)
     #writer = cmn.to_file(rm_50.sort_index(ascending=False, inplace=False),"3_RollMean50",csv,str_trade_date)
-    
+    '''
     day_1_returns = rf.compute_daily_returns(df_Stock,1)
     #writer = cmn.to_file(day_1_returns.sort_index(ascending=False, inplace=False),"4_OneDayRet",csv,str_trade_date)
     
@@ -98,9 +97,11 @@ def test_run():
     indx = ra_15plarge.index.values
     Cntr_10D_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_10D_Sell.sort_index(ascending=False, inplace=False),"16_10DCounterSell",csv,str_trade_date)
-    '''
+    
     rRSI_13 = rf.get_Rolling_RSI(df_Stock,13)
-    writer = cmn.to_file(rRSI_13.sort_index(ascending=False, inplace=False),"17_13DRSI",csv,str_trade_date)
+    #writer = cmn.to_file(rRSI_13.sort_index(ascending=False, inplace=False),"17_13DRSI",csv,str_trade_date)
+    
+ 
     
     array_cntr = np.where(rRSI_13.isnull() ,np.nan,
                       np.where(rRSI_13 <= 15,3,
@@ -119,7 +120,41 @@ def test_run():
     indx = rRSI_13.index.values
     Cntr_RSI_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_RSI_Sell.sort_index(ascending=False, inplace=False),"19_RSICounterSell",csv,str_trade_date)
-      
+    
+    vwap1 = rf.get_rolling_VMAP(df_Stock,200,1)
+    writer = cmn.to_file(vwap1.sort_index(ascending=False, inplace=False) ,"20_VWAP1",csv,str_trade_date)
+   
+    vwap2 = rf.get_rolling_VMAP(df_Stock,200,2)
+    writer = cmn.to_file(vwap2.sort_index(ascending=False, inplace=False) ,"21_VWAP2",csv,str_trade_date)
+ 
+    vwap3 = rf.get_rolling_VMAP(df_Stock,200,3)
+    writer = cmn.to_file(vwap2.sort_index(ascending=False, inplace=False) ,"22_VWAP3",csv,str_trade_date)
+    
+    v1_ratio = np.where(vwap1.isnull() ,np.nan,(df_Stock - vwap1)/df_Stock)
+    v2_ratio = np.where(vwap1.isnull() ,np.nan,(df_Stock - vwap2)/df_Stock)
+    v3_ratio = np.where(vwap1.isnull() ,np.nan,(df_Stock - vwap3)/df_Stock)
+    
+    indx = vwap3.index.values
+    df_v1_ratio = pd.DataFrame(v1_ratio,index=indx ,columns=list_nse50)
+    df_v2_ratio = pd.DataFrame(v2_ratio,index=indx ,columns=list_nse50)
+    df_v3_ratio = pd.DataFrame(v3_ratio,index=indx ,columns=list_nse50)
+    
+
+    array_cntr = np.where(df_v1_ratio.isnull() ,np.nan,
+                          np.where((df_v1_ratio.abs() > 0.02) | 
+                                   (df_v2_ratio.abs() > 0.02) | 
+                                   (df_v3_ratio.abs() > 0.02),2,0))
+    indx = df_v1_ratio.index.values
+    Cntr_VWAP_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_VWAP_Buy.sort_index(ascending=False, inplace=False),"23_VWAPCounterBuy",csv,str_trade_date)
+   '''
+    df_dma50 = np.where(rm_50.isnull() ,np.nan,(df_Stock - rm_50)/df_Stock)
+    df_dma200 = np.where(rm_200.isnull() ,np.nan,(df_Stock - rm_20)/df_Stock)
+    
+    array_cntr1 = np.where(df_dma50.isnull() ,np.nan,
+                          np.where((df_dma50 < 0.02) &
+                                   (df_dma50 > -0.015),1,0))
+    
     test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     

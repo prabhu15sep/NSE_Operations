@@ -40,3 +40,29 @@ def find_nlargest_avg(input_list,size=5,n1=1,n2=1,n3=1):
         return np.NaN
     desc_list = np.sort(temp)[::-1]
     return  (desc_list[n1 - 1] + desc_list[n2 - 1] + desc_list[n3 - 1])/3
+
+def findVWAP(input_list,size=100,n1=1):
+    temp = input_list.copy()
+    if sum(~np.isnan(x) for x in temp) < size:
+        return np.NaN
+    
+    hist,edges = np.histogram(input_list,bins=20)
+    i,j,k = find_nlargest(hist.tolist(),3,1,2,3)
+    
+    iloc = hist.tolist().index(i)
+    
+    if j == i:
+        hist[iloc] = -1
+        
+    jloc = hist.tolist().index(j)
+    if k == j:
+        hist[jloc] = -1
+    
+    kloc = hist.tolist().index(k)
+    ploc = [iloc,jloc,kloc]
+    max = edges[20]
+    min = edges[0]
+    vwap = (max - min)*(ploc[n1-1]*0.05 - 0.025) + min
+    return vwap
+    
+    

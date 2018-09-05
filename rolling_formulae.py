@@ -42,8 +42,14 @@ def compute_daily_returns(df,n=1):
     return df_daily_ret
 
 def get_rolling_nAvg(df,window,n1,n2,n3):
-    df_nAvg = df.rolling(window=window, min_periods=window, center=False).apply(lambda x: cmn.find_nlargest_avg(x,window,n1,n2,n3))
+    df_nAvg = df.rolling(window=window, min_periods=window, center=False).apply \
+                            (lambda x: cmn.find_nlargest_avg(x,window,n1,n2,n3))
     return df_nAvg
+
+def get_rolling_VMAP(df,window,n):
+    df_VMAP = df.rolling(window=window, min_periods=window, center=False).apply \
+                            (lambda x: cmn.findVWAP(x,window,n))
+    return df_VMAP
 
 def get_Rolling_RSI(df,window_length):
     df_temp = df.diff()                                       # Get the difference in price from previous step
