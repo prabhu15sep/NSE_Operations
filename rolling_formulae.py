@@ -46,6 +46,11 @@ def get_rolling_nAvg(df,window,n1,n2,n3):
                             (lambda x: cmn.find_nlargest_avg(x,window,n1,n2,n3))
     return df_nAvg
 
+def get_rolling_small(df,window,n):
+    df_nSmall = df.rolling(window=window, min_periods=window, center=False).apply \
+                            (lambda x: cmn.find_nsmallest(x,window,n))
+    return df_nSmall
+
 def get_rolling_VMAP(df,window,n):
     df_VMAP = df.rolling(window=window, min_periods=window, center=False).apply \
                             (lambda x: cmn.findVWAP(x,window,n))

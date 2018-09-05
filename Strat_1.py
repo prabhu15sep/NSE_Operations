@@ -147,7 +147,7 @@ def test_run():
     indx = df_v1_ratio.index.values
     Cntr_VWAP = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_VWAP.sort_index(ascending=False, inplace=False),"23_VWAPCounter",csv,str_trade_date)
-   '''
+   
     df_dma50 = np.where(rm_50.isnull() ,np.nan,(df_Stock - rm_50)/df_Stock)
     df_dma200 = np.where(rm_200.isnull() ,np.nan,(df_Stock - rm_200)/df_Stock)
     
@@ -174,7 +174,25 @@ def test_run():
     indx = rm_50.index.values
     Cntr_DMA_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_DMA_Sell.sort_index(ascending=False, inplace=False),"25_DMACounterSell",csv,str_trade_date)
-  
+    '''
+    rs_SLBuy = rf.get_rolling_small(df_Stock,1100,1)
+    writer = cmn.to_file(rs_SLBuy.sort_index(ascending=False, inplace=False),"26_SLBuy",csv,str_trade_date)
+    
+    array_cntr = np.where(rs_SLBuy.isnull() ,np.nan,
+                          np.where((((df_Stock - rs_SLBuy).abs())/df_Stock)<0.025,2,0))
+    indx = rs_SLBuy.index.values
+    Cntr_SL_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_SL_Buy.sort_index(ascending=False, inplace=False),"27_SLCounterBuy",csv,str_trade_date)
+ 
+    rs_SLSell = rf.get_rolling_small(df_Stock,1100,1100)
+    writer = cmn.to_file(rs_SLSell.sort_index(ascending=False, inplace=False),"28_SLSel",csv,str_trade_date)
+    
+    array_cntr = np.where(rs_SLSell.isnull() ,np.nan,
+                          np.where((((df_Stock - rs_SLSell).abs())/df_Stock)<0.025,2,0))
+    indx = rs_SLSell.index.values
+    Cntr_SL_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_SL_Sell.sort_index(ascending=False, inplace=False),"29_SLCounterSell",csv,str_trade_date)
+ 
     test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     
