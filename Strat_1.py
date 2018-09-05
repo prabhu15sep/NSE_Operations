@@ -145,16 +145,36 @@ def test_run():
                                    (df_v2_ratio.abs() > 0.02) | 
                                    (df_v3_ratio.abs() > 0.02),2,0))
     indx = df_v1_ratio.index.values
-    Cntr_VWAP_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
-    writer = cmn.to_file(Cntr_VWAP_Buy.sort_index(ascending=False, inplace=False),"23_VWAPCounterBuy",csv,str_trade_date)
+    Cntr_VWAP = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_VWAP.sort_index(ascending=False, inplace=False),"23_VWAPCounter",csv,str_trade_date)
    '''
     df_dma50 = np.where(rm_50.isnull() ,np.nan,(df_Stock - rm_50)/df_Stock)
-    df_dma200 = np.where(rm_200.isnull() ,np.nan,(df_Stock - rm_20)/df_Stock)
+    df_dma200 = np.where(rm_200.isnull() ,np.nan,(df_Stock - rm_200)/df_Stock)
     
-    array_cntr1 = np.where(df_dma50.isnull() ,np.nan,
+    array_cntr1 = np.where(np.isnan(df_dma50) ,np.nan,
                           np.where((df_dma50 < 0.02) &
                                    (df_dma50 > -0.015),1,0))
     
+    array_cntr2 = np.where(np.isnan(df_dma200)  ,np.nan,
+                          np.where((df_dma200 < 0.02) &
+                                   (df_dma200 > -0.02),2,0))
+    
+    array_cntr = np.where(np.isnan(array_cntr2) ,array_cntr1,array_cntr1 + array_cntr2)
+                           
+    indx = rm_50.index.values
+    Cntr_DMA_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_DMA_Buy.sort_index(ascending=False, inplace=False),"24_DMACounterBuy",csv,str_trade_date)
+    
+    array_cntr1 = np.where(np.isnan(df_dma50) ,np.nan,
+                          np.where((df_dma50 < 0.015) &
+                                   (df_dma50 > -0.02),1,0))
+    
+    array_cntr = np.where(np.isnan(array_cntr2) ,array_cntr1,array_cntr1 + array_cntr2)
+                           
+    indx = rm_50.index.values
+    Cntr_DMA_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_DMA_Sell.sort_index(ascending=False, inplace=False),"25_DMACounterSell",csv,str_trade_date)
+  
     test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     
