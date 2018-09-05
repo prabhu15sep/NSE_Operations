@@ -174,7 +174,7 @@ def test_run():
     indx = rm_50.index.values
     Cntr_DMA_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_DMA_Sell.sort_index(ascending=False, inplace=False),"25_DMACounterSell",csv,str_trade_date)
-    '''
+    
     rs_SLBuy = rf.get_rolling_small(df_Stock,1100,1)
     writer = cmn.to_file(rs_SLBuy.sort_index(ascending=False, inplace=False),"26_SLBuy",csv,str_trade_date)
     
@@ -192,7 +192,38 @@ def test_run():
     indx = rs_SLSell.index.values
     Cntr_SL_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
     writer = cmn.to_file(Cntr_SL_Sell.sort_index(ascending=False, inplace=False),"29_SLCounterSell",csv,str_trade_date)
- 
+ '''
+    rm_20 = rf.get_rolling_mean(df_Stock, window=20)
+    rd_20 = ((df_Stock - rm_20)/df_Stock).abs()
+    writer = cmn.to_file(rd_20.sort_index(ascending=False, inplace=False),"30_20Ddev",csv,str_trade_date)
+    
+    rl_5p = rf.get_rolling_small(rd_20,1000,950)
+    writer = cmn.to_file(rl_5p.sort_index(ascending=False, inplace=False),"31_5pDev",csv,str_trade_date)
+    
+    rl_12p = rf.get_rolling_small(rd_20,1000,880)
+    writer = cmn.to_file(rl_12p.sort_index(ascending=False, inplace=False),"32_12pDev",csv,str_trade_date)
+        
+    rl_20p = rf.get_rolling_small(rd_20,1000,800)
+    writer = cmn.to_file(rl_20p.sort_index(ascending=False, inplace=False),"33_20pDev",csv,str_trade_date)
+     
+    array_cntr = np.where(rm_50.isnull() ,np.nan,
+                          np.where(df_Stock > rm_50,0,
+                          np.where(rd_20 > rl_5p,3,
+                          np.where(rd_20 > rl_12p,2,
+                          np.where(rd_20 > rl_20p,1,0)))))
+    indx = rm_50.index.values
+    Cntr_20dDev_Buy = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_20dDev_Buy.sort_index(ascending=False, inplace=False),"34_20dDevCounterBuy",csv,str_trade_date)
+
+    array_cntr = np.where(rm_50.isnull() ,np.nan,
+                          np.where(df_Stock < rm_50,0,
+                          np.where(rd_20 > rl_5p,3,
+                          np.where(rd_20 > rl_12p,2,
+                          np.where(rd_20 > rl_20p,1,0)))))
+    indx = rm_50.index.values
+    Cntr_20dDev_Sell = pd.DataFrame(array_cntr,index=indx ,columns=list_nse50)
+    writer = cmn.to_file(Cntr_20dDev_Sell.sort_index(ascending=False, inplace=False),"35_20dDevCounterSell",csv,str_trade_date)
+
     test_1 = np.where(abs_day_1_returns == day_1_returns,1,0)
     df_filter = df_filter.rename(columns={'Mean': 'C~200DA'})
     
