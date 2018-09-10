@@ -53,3 +53,5 @@ def test_run():
 if __name__ == "__main__":
     test_run()
     ***********************************************
+    
+    list_set = fnmatch.filter(os.listdir(yahoo_files_path), '{}*.csv'.format(symbol)) 

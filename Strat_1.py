@@ -54,13 +54,13 @@ def test_run():
     counter_rm_abs1day_50 = rm_abs1day_50 < 2
     #writer = cmn.to_file(counter_rm_abs1day_50.sort_index(ascending=False, inplace=False),"6_Counter50DayAbsRet",csv,str_trade_date)
     
+    day_10_returns = rf.compute_daily_returns(df_Stock,10)
+    writer = cmn.to_file(day_10_returns.sort_index(ascending=False, inplace=False),"7_10DayRet",csv,str_trade_date)
+   
     
     rd_10DRet = rf.get_rolling_std(day_10_returns, window=1200)
     #writer = cmn.to_file(rd_10DRet.sort_index(ascending=False, inplace=False),"8_10DayRetStdDev",csv,str_trade_date)
-    
-    day_10_returns = rf.compute_daily_returns(df_Stock,10)
-    writer = cmn.to_file(day_10_returns.sort_index(ascending=False, inplace=False),"7_10DayRet",csv,str_trade_date)
-    
+     
     ra_10plarge = rf.get_rolling_nAvg(df_Stock,1200,120,120,40)
     writer = cmn.to_file(ra_10plarge.sort_index(ascending=False, inplace=False),"9_10PCLarge",csv,str_trade_date)
     
