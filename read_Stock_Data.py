@@ -5,7 +5,7 @@
 import os
 import pandas as pd
 
-def list_to_path(list_name, base_dir="/Volumes/2/PyD/nsedb"):    #"D:\\ppadayac\\PraChin\\db"  "/Volumes/2/PyD/nsedb"
+def list_to_path(list_name, base_dir="D:\\ppadayac\\PraChin\\db\\new"):    #"D:\\ppadayac\\PraChin\\db"  "/Volumes/2/PyD/nsedb"
     """Return CSV file p  ath given ticker symbol."""
     return os.path.join(base_dir, "{}.csv".format(str(list_name)))
     
