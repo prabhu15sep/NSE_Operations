@@ -42,7 +42,8 @@ new_df.insert( len(columns_buy),'Sell', np.nan)
 
 new_df.index = new_df.index.strftime('%d/%m/%Y')
 movies_sheet1['Date'] = movies_sheet1['Date'].dt.strftime('%d/%m/%Y')
-movies_sheet1.iloc[3:5,0:1] = ''
+movies_sheet1['Date'] = np.where(movies_sheet1['Date'] == 'NaT','',movies_sheet1['Date'])
+##movies_sheet1.iloc[3:5,0:1] = ''
 xl_file = pd.ExcelWriter(excel_file)
 movies_sheet1.to_excel(xl_file, sheet_name='Investment',index=False)
 new_df.to_excel(xl_file, sheet_name='Profit Summary')
