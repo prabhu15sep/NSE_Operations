@@ -20,15 +20,15 @@ importlib.reload(rf)
 
 def test_run():
     ######Reading Data###################
-    df_nse50 = rd.get_list('nse_Top50', 'Symbol')                   #Extract list of Top Nse50 Stcoks
+    df_nse50 = rd.get_list('ind_nifty50list', 'Symbol')                   #Extract list of Top Nse50 Stcoks
     list_nse50 = df_nse50.index.tolist()                            #Array of Stcok symbols
 
     csv = "CSV"
     excel = "EXCEL"
-    start_date = datetime.date(2013,1,1)
-    end_date = datetime.date.today()      #date.today() datetime.date(2013,12,31)
+    start_date = datetime.date(2012,1,1)
+    end_date = datetime.date(2014,1,1)     #date.today() datetime.date(2013,12,31)
     
-    df_Stock = rd.get_data(list_nse50[0:51],end_date,2000)        #Extract Data from a given date to past x no of traded days
+    df_Stock = rd.get_data(list_nse50[0:51],end_date,700)        #Extract Data from a given date to past x no of traded days
     df_Stock = df_Stock.dropna(how='all') 
         #Formate date to DD/MM/YYYY formate
     df_Stock.index.name = 'Date'

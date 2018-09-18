@@ -13,26 +13,26 @@ import numpy as np
 import read_Stock_Data as rd
 importlib.reload(rd)  
 
-df_nse50 = rd.get_list('nse_Top50', 'Symbol')                   #Extract list of Top Nse50 Stcoks
+df_nse50 = rd.get_list('ind_nifty50list', 'Symbol')                   #Extract list of Top Nse50 Stcoks
 list_nse50 = df_nse50.index.tolist() 
 
-start_date = date(2018,8,10)
-end_date = date(2018,8,20)                 #date.today()#date(2012,12,31)
+start_date = date(2012,1,1)
+end_date = date(2014,1,1)                 #date.today()#date(2012,12,31)
 rec_count = {}
 sbin = get_history(symbol="NIFTY",start=start_date,end=end_date,index=True)
 rec_count['NIFTY'] = len(sbin.index)
-#sbin.to_csv("/Volumes/2/PyD/nsedb/NIFTY.csv") 
-with open('/Volumes/2/PyD/nsedb/NIFTY.csv', 'a') as f:
-    sbin.to_csv(f, header=False)
+sbin.to_csv("/Volumes/2/PyD/nsedb/NIFTY.csv") 
+'''with open('/Volumes/2/PyD/nsedb/NIFTY.csv', 'a') as f:
+    sbin.to_csv(f, header=False)'''
     
 #list_nse50 = ['EICHERMOT']
 
 for symbl in list_nse50[1:]:
     sbin = get_history(symbol=symbl, start=start_date,end=end_date)
     rec_count[symbl] = len(sbin.index)
-    #sbin.to_csv("/Volumes/2/PyD/nsedb/{}.csv".format(str(symbl)))    #D:\\ppadayac\\PraChin\\db\\new\\
-    with open("/Volumes/2/PyD/nsedb/{}.csv".format(str(symbl)), 'a') as f:
-        sbin.to_csv(f, header=False)
+    sbin.to_csv("/Volumes/2/PyD/nsedb/{}.csv".format(str(symbl)))    #D:\\ppadayac\\PraChin\\db\\new\\
+'''    with open("/Volumes/2/PyD/nsedb/{}.csv".format(str(symbl)), 'a') as f:
+        sbin.to_csv(f, header=False)'''
     
 print(rec_count)
 trading_days_cnt = np.busday_count( start_date, end_date )
