@@ -1,0 +1,35 @@
+https://developer.salesforce.com/blogs/engineering/2015/05/developer-practices-checklist
+
+https://www.apexhours.com/code-review-checklist/
+
+https://www.codescan.io/blog/a-complete-salesforce-code-review-checklist/
+
+https://dineshyadav.com/salesforce-developer-best-practices-checklist/
+
+
+
+
+US added after the review
+Test status and timeline are not tracakable
+Chanllenges to Prepare slides
+
+1) Sprint Review Board send on Thursday
+2) Sprint Review done on Wednesday (Release week)
+3) Copado Freezed on Thursday
+4) Slides to be done on Friday-Monday
+5) Sprint Planning done on Thursday (Next week to Release)
+
+VASP :-
+FP - seprate JIRA for Deployment 
+
+
+
+https://valmet.lightning.force.com/one/one.app#eyJjb21wb25lbnREZWYiOiJvbmU6YWxvaGFQYWdlIiwiYXR0cmlidXRlcyI6eyJhZGRyZXNzIjoiaHR0cHM6Ly92YWxtZXQtLWNvcGFkby52Zi5mb3JjZS5jb20vYXBleC9GbG93X0ZpbmRBbmRSZXBsYWNlRWRpdG9yP2lkPWEyNTRIMDAwMDAxUUVpTVFBVyJ9LCJzdGF0ZSI6e319
+
+
+prabhu.padayachi@capgemini.com.copadotest\
+
+
+SELECT name,copado__Metadata_API_Name__c,copado__User_Story__c,copado__User_Story__r.name,copado__User_Story__r.copado__User_Story_Title__c,copado__User_Story__r.copado__Environment__r.name FROM copado__User_Story_Metadata__c where copado__User_Story__c='a3D4K000000au6JUAQ' 
+
+SELECT name,copado__Metadata_API_Name__c,copado__User_Story__c,copado__User_Story__r.name,copado__User_Story__r.copado__User_Story_Title__c,copado__User_Story__r.copado__Environment__r.name FROM copado__User_Story_Metadata__c where copado__Metadata_API_Name__c like '%apexclass%Purchase%' and copado__User_Story__c='a3D4K000000au6JUAQ' 
